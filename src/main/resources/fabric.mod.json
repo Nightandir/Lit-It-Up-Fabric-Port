@@ -4,16 +4,23 @@
   "version": "${version}",
   "name": "Lit It Up (Fabric Port)",
   "description": "Fabric reimplementation of Lit It Up for Minecraft 1.21.11.",
-  "authors": ["Nightandir"],
+  "authors": [
+    "Nightandir"
+  ],
   "license": "LGPL-3.0-or-later",
   "environment": "*",
   "entrypoints": {
-    "main": ["dev.nightandir.lititup.LitItUpFabric"]
+    "main": [
+      "dev.nightandir.lititup.LitItUpFabric"
+    ]
   },
   "depends": {
     "fabricloader": ">=0.18.0",
     "minecraft": "1.21.11",
     "java": ">=21",
     "fabric-api": "*"
-  }
+  },
+  "mixins": [
+    "lititup_fabric.mixins.json"
+  ]
 }
