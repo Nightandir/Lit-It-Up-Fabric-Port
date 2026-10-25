@@ -25,20 +25,17 @@ public final class FurnaceIgnition {
         if (world.isClient()) return ActionResult.PASS;
         BlockPos pos = hit.getBlockPos();
         BlockState state = world.getBlockState(pos);
-        if (!(state.getBlock() instanceof AbstractFurnaceBlock) || !(world.getBlockEntity(pos) instanceof AbstractFurnaceBlockEntity furnace)) {
+        if (!(state.getBlock() instanceof AbstractFurnaceBlock) ||
+            !(world.getBlockEntity(pos) instanceof AbstractFurnaceBlockEntity furnace)) {
             return ActionResult.PASS;
         }
 
         ItemStack held = player.getStackInHand(hand);
-        if (!held.isOf(Items.FLINT_AND_STEEL) && !held.isOf(Items.FIRE_CHARGE)) return ActionResult.PASS;
-        if (state.get(AbstractFurnaceBlock.LIT)) return ActionResult.PASS;
+        if (!held.isOf(Items.FLINT_AND_STEEL) || state.get(AbstractFurnaceBlock.LIT)) return ActionResult.PASS;
 
-        // The mixin consumes this one-shot token when vanilla tries to start a new fuel burn.
-        furnace.setCustomData(LitItUpFabric.IGNITION_TOKEN, true);
-        if (held.isDamageable()) held.damage(1, (ServerWorld) world, player, item -> {});
-        else if (!player.isCreative()) held.decrement(1);
+        ((IgnitionTracked) furnace).lititup$setIgnitionToken(true);
+        held.damage(1, (ServerWorld) world, player, item -> {});
         player.swingHand(hand);
-        LitItUpFabric.LOGGER.debug("Player ignited furnace at {}", pos);
         return ActionResult.SUCCESS;
     }
 }
